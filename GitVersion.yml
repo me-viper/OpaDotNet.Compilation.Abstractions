@@ -1,0 +1,8 @@
+mode: Mainline
+tag-prefix: '[vV]'
+branches:
+  release:
+    tag: preview
+ignore:
+  sha: []
+merge-message-formats: {}
