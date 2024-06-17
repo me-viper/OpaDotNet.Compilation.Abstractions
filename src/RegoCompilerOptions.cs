@@ -47,4 +47,9 @@ public class RegoCompilerOptions
     /// Set file and directory names to ignore during loading (e.g., '.*' excludes hidden files).
     /// </summary>
     public IReadOnlySet<string> Ignore { get; set; } = new HashSet<string>();
+
+    /// <summary>
+    /// Sets OPA features and behaviors that will be enabled by default.
+    /// </summary>
+    public OpaCompatibility Compatibility { get; set; } = OpaCompatibility.Legacy;
 }

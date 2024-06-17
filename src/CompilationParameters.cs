@@ -25,4 +25,9 @@ public record CompilationParameters
     /// Capabilities json that defines the built-in functions and other language features that policies may depend on.
     /// </summary>
     public Stream? CapabilitiesStream { get; init; }
+
+    /// <summary>
+    /// Output bundle revision.
+    /// </summary>
+    public string? Revision { get; init; }
 }

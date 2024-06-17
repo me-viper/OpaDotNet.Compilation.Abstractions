@@ -214,6 +214,41 @@ public sealed class BundleWriter : IDisposable, IAsyncDisposable
         IsEmpty = false;
     }
 
+    /// <summary>
+    /// Merges contents of source bundle into this bundle.
+    /// </summary>
+    /// <param name="bundle">Source bundle.</param>
+    public void WriteBundle(Stream bundle)
+    {
+        ArgumentNullException.ThrowIfNull(bundle);
+
+        var gzip = new GZipStream(bundle, CompressionMode.Decompress);
+        using var ms = new MemoryStream();
+
+        gzip.CopyTo(ms);
+        ms.Seek(0, SeekOrigin.Begin);
+
+        using var tr = new TarReader(ms);
+
+        while (tr.GetNextEntry() is { } sourceEntry)
+        {
+            var entry = new PaxTarEntry(sourceEntry);
+            _writer.WriteEntry(entry);
+        }
+    }
+
+    /// <summary>
+    /// Writer contents of file into bundle.
+    /// </summary>
+    /// <param name="path">File to write.</param>
+    /// <param name="overridePath">Relative file path inside bundle.</param>
+    public void WriteFile(string path, string? overridePath = null)
+    {
+        using var fs = new FileStream(path, FileMode.Open);
+        var targetPath = overridePath ?? path;
+        WriteEntry(fs, targetPath);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {

@@ -1,8 +1,11 @@
-﻿namespace OpaDotNet.Compilation.Abstractions;
+﻿using JetBrains.Annotations;
+
+namespace OpaDotNet.Compilation.Abstractions;
 
 /// <summary>
 /// Compilation extensions.
 /// </summary>
+[PublicAPI]
 public static class RegoCompilerExtensions
 {
     /// <summary>
@@ -16,7 +19,7 @@ public static class RegoCompilerExtensions
     /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static Task<Stream> CompileBundle(
+    public static async Task<Stream> CompileBundle(
         this IRegoCompiler compiler,
         string bundlePath,
         IEnumerable<string>? entrypoints = null,
@@ -25,14 +28,17 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(bundlePath);
 
-        var p = new CompilationParameters
-        {
-            IsBundle = true,
-            Entrypoints = entrypoints?.ToHashSet(),
-            CapabilitiesFilePath = capabilitiesFilePath,
-        };
+        var c = new RegoCompilerWrapper(compiler)
+            .WithAsBundle()
+            .WithSourcePath(bundlePath);
 
-        return compiler.Compile(bundlePath, p, cancellationToken);
+        if (entrypoints != null)
+            c.WithEntrypoints(entrypoints);
+
+        if (capabilitiesFilePath != null)
+            c.WithCapabilities(capabilitiesFilePath);
+
+        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -43,7 +49,7 @@ public static class RegoCompilerExtensions
     /// <param name="entrypoints">Which documents (entrypoints) will be queried when asking for policy decisions.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static Task<Stream> CompileFile(
+    public static async Task<Stream> CompileFile(
         this IRegoCompiler compiler,
         string sourceFilePath,
         IEnumerable<string>? entrypoints = null,
@@ -51,13 +57,12 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(sourceFilePath);
 
-        var p = new CompilationParameters
-        {
-            IsBundle = false,
-            Entrypoints = entrypoints?.ToHashSet(),
-        };
+        var c = new RegoCompilerWrapper(compiler).WithSourcePath(sourceFilePath);
 
-        return compiler.Compile(sourceFilePath, p, cancellationToken);
+        if (entrypoints != null)
+            c.WithEntrypoints(entrypoints);
+
+        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -71,7 +76,7 @@ public static class RegoCompilerExtensions
     /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static Task<Stream> CompileStream(
+    public static async Task<Stream> CompileStream(
         this IRegoCompiler compiler,
         Stream bundle,
         IEnumerable<string>? entrypoints = null,
@@ -80,14 +85,17 @@ public static class RegoCompilerExtensions
     {
         ArgumentNullException.ThrowIfNull(bundle);
 
-        var p = new CompilationParameters
-        {
-            IsBundle = true,
-            Entrypoints = entrypoints?.ToHashSet(),
-            CapabilitiesStream = capabilitiesJson,
-        };
+        var c = new RegoCompilerWrapper(compiler)
+            .WithAsBundle()
+            .WithSourceStream(bundle);
 
-        return compiler.Compile(bundle, p, cancellationToken);
+        if (entrypoints != null)
+            c.WithEntrypoints(entrypoints);
+
+        if (capabilitiesJson != null)
+            c.WithCapabilities(capabilitiesJson);
+
+        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -116,12 +124,13 @@ public static class RegoCompilerExtensions
 
         bundle.Seek(0, SeekOrigin.Begin);
 
-        var p = new CompilationParameters
-        {
-            IsBundle = true,
-            Entrypoints = entrypoints?.ToHashSet(),
-        };
+        var c = new RegoCompilerWrapper(compiler)
+            .WithAsBundle()
+            .WithSourceStream(bundle);
 
-        return await compiler.Compile(bundle, p, cancellationToken).ConfigureAwait(false);
+        if (entrypoints != null)
+            c.WithEntrypoints(entrypoints);
+
+        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
 }
