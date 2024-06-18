@@ -5,6 +5,7 @@
 ### Features
 
 * Support `--v1-compatible` and `--revision` compiler flags
+* Public API improvements
 
 ## OpaDotNet.Compilation.Abstraction v1.6.0 (2024-01-10)
 
