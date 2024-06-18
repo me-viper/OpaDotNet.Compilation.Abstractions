@@ -51,5 +51,5 @@ public class RegoCompilerOptions
     /// <summary>
     /// Sets OPA features and behaviors that will be enabled by default.
     /// </summary>
-    public OpaCompatibility Compatibility { get; set; } = OpaCompatibility.Legacy;
+    public RegoVersion RegoVersion { get; set; } = RegoVersion.V0;
 }

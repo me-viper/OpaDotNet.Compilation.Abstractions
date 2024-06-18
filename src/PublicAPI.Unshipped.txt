@@ -1,13 +1,10 @@
 #nullable enable
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteBundle(System.IO.Stream! bundle) -> void
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteFile(string! path, string? overridePath = null) -> void
-OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.Compatibility.get -> OpaDotNet.Compilation.Abstractions.OpaCompatibility
-OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.Compatibility.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.get -> string?
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.init -> void
-OpaDotNet.Compilation.Abstractions.OpaCompatibility
-OpaDotNet.Compilation.Abstractions.OpaCompatibility.Legacy = 0 -> OpaDotNet.Compilation.Abstractions.OpaCompatibility
-OpaDotNet.Compilation.Abstractions.OpaCompatibility.V1 = 1 -> OpaDotNet.Compilation.Abstractions.OpaCompatibility
+OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.RegoVersion.get -> OpaDotNet.Compilation.Abstractions.RegoVersion
+OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.RegoVersion.set -> void
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.CompileAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.IO.Stream!>!
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.RegoCompilerWrapper(OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler) -> void
@@ -21,3 +18,7 @@ OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.WithRevision(string! revi
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.WithSourceCode(string! source) -> OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper!
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.WithSourcePath(string! path) -> OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper!
 OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper.WithSourceStream(System.IO.Stream! stream) -> OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper!
+OpaDotNet.Compilation.Abstractions.RegoVersion
+OpaDotNet.Compilation.Abstractions.RegoVersion.V0 = 0 -> OpaDotNet.Compilation.Abstractions.RegoVersion
+OpaDotNet.Compilation.Abstractions.RegoVersion.V0CompatV1 = 1 -> OpaDotNet.Compilation.Abstractions.RegoVersion
+OpaDotNet.Compilation.Abstractions.RegoVersion.V1 = 2 -> OpaDotNet.Compilation.Abstractions.RegoVersion
