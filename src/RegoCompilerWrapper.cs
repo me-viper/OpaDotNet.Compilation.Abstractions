@@ -153,6 +153,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
         }
 
         bs.Seek(0, SeekOrigin.Begin);
+        WithAsBundle();
 
         return await compiler.Compile(bs, _options, cancellationToken).ConfigureAwait(false);
     }
