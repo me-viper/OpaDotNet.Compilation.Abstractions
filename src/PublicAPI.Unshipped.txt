@@ -22,3 +22,4 @@ OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V0 = 0 -> OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V0CompatV1 = 1 -> OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V1 = 2 -> OpaDotNet.Compilation.Abstractions.RegoVersion
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.Configure(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler) -> OpaDotNet.Compilation.Abstractions.RegoCompilerWrapper!

@@ -134,5 +134,10 @@ public static class RegoCompilerExtensions
         return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Enables advanced compiler options configuration.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <returns>Compiler options configuration.</returns>
     public static RegoCompilerWrapper Configure(this IRegoCompiler compiler) => new(compiler);
 }
