@@ -49,7 +49,7 @@ public class RegoCompilerTests
                 )
             .ReturnsAsync(Stream.Null);
 
-        var policy = await new RegoCompilerWrapper(compiler.Object)
+        var policy = await compiler.Object.Configure()
             .WithRevision("r1")
             .WithEntrypoints(["ep1", "ep2"])
             .WithCapabilities("/d/caps.json")
@@ -79,7 +79,7 @@ public class RegoCompilerTests
 
         ms.Seek(0, SeekOrigin.Begin);
 
-        var policy = await new RegoCompilerWrapper(compiler)
+        var policy = await compiler.Configure()
             .WithSourcePath("TestData/p1.rego")
             .WithSourcePath("TestData/p2.rego")
             .WithSourceCode(Src(1))

@@ -133,4 +133,6 @@ public static class RegoCompilerExtensions
 
         return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
     }
+
+    public static RegoCompilerWrapper Configure(this IRegoCompiler compiler) => new(compiler);
 }
