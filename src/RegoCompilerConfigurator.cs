@@ -6,7 +6,7 @@ namespace OpaDotNet.Compilation.Abstractions;
 /// Exposes an OPA policy compiler.
 /// </summary>
 [PublicAPI]
-public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
+public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
 {
     private CompilationParameters _options = new();
 
@@ -19,7 +19,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Output bundle revision.
     /// </summary>
-    public RegoCompilerWrapper WithRevision(string revision)
+    public RegoCompilerConfigurator WithRevision(string revision)
     {
         _options = _options with { Revision = revision };
         return this;
@@ -29,7 +29,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// Specifies bundle manifest.
     /// </summary>
     /// <param name="manifest">Bundle manifest.</param>
-    public RegoCompilerWrapper WithManifest(BundleManifest manifest)
+    public RegoCompilerConfigurator WithManifest(BundleManifest manifest)
     {
         ArgumentNullException.ThrowIfNull(manifest);
 
@@ -40,7 +40,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Specifies if compilation source if file or bundle.
     /// </summary>
-    public RegoCompilerWrapper WithAsBundle(bool isBundle = true)
+    public RegoCompilerConfigurator WithAsBundle(bool isBundle = true)
     {
         _options = _options with { IsBundle = isBundle };
         return this;
@@ -49,7 +49,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Which documents (entrypoints) will be queried when asking for policy decisions.
     /// </summary>
-    public RegoCompilerWrapper WithEntrypoints(IEnumerable<string> entrypoints)
+    public RegoCompilerConfigurator WithEntrypoints(IEnumerable<string> entrypoints)
     {
         ArgumentNullException.ThrowIfNull(entrypoints);
 
@@ -60,7 +60,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Which documents (entrypoints) will be queried when asking for policy decisions.
     /// </summary>
-    public RegoCompilerWrapper WithEntrypoints(string[] entrypoints)
+    public RegoCompilerConfigurator WithEntrypoints(string[] entrypoints)
     {
         ArgumentNullException.ThrowIfNull(entrypoints);
 
@@ -71,7 +71,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Capabilities file that defines the built-in functions and other language features that policies may depend on.
     /// </summary>
-    public RegoCompilerWrapper WithCapabilities(string path)
+    public RegoCompilerConfigurator WithCapabilities(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
 
@@ -82,7 +82,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Capabilities json that defines the built-in functions and other language features that policies may depend on.
     /// </summary>
-    public RegoCompilerWrapper WithCapabilities(Stream stream)
+    public RegoCompilerConfigurator WithCapabilities(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
 
@@ -93,7 +93,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from path.
     /// </summary>
-    public RegoCompilerWrapper WithSourcePath(string path)
+    public RegoCompilerConfigurator WithSourcePath(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
 
@@ -104,7 +104,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from stream.
     /// </summary>
-    public RegoCompilerWrapper WithSourceStream(Stream stream)
+    public RegoCompilerConfigurator WithSourceStream(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
 
@@ -115,7 +115,7 @@ public sealed class RegoCompilerWrapper(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from source code.
     /// </summary>
-    public RegoCompilerWrapper WithSourceCode(string source)
+    public RegoCompilerConfigurator WithSourceCode(string source)
     {
         ArgumentException.ThrowIfNullOrEmpty(source);
 
