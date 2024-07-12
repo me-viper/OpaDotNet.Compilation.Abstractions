@@ -238,7 +238,7 @@ public sealed class BundleWriter : IDisposable, IAsyncDisposable
     }
 
     /// <summary>
-    /// Writer contents of file into bundle.
+    /// Writes contents of file into bundle.
     /// </summary>
     /// <param name="path">File to write.</param>
     /// <param name="overridePath">Relative file path inside bundle.</param>
@@ -247,6 +247,17 @@ public sealed class BundleWriter : IDisposable, IAsyncDisposable
         using var fs = new FileStream(path, FileMode.Open);
         var targetPath = overridePath ?? path;
         WriteEntry(fs, targetPath);
+    }
+
+    /// <summary>
+    /// Writes manifest into bundle.
+    /// </summary>
+    /// <param name="manifest">Policy bundle manifest.</param>
+    public void WriteManifest(BundleManifest manifest)
+    {
+        ArgumentNullException.ThrowIfNull(manifest);
+
+        WriteEntry(JsonSerializer.Serialize(manifest), ".manifest");
     }
 
     /// <inheritdoc />

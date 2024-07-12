@@ -1,6 +1,7 @@
 #nullable enable
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteBundle(System.IO.Stream! bundle) -> void
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteFile(string! path, string? overridePath = null) -> void
+OpaDotNet.Compilation.Abstractions.BundleWriter.WriteManifest(OpaDotNet.Compilation.Abstractions.BundleManifest! manifest) -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.get -> string?
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.init -> void
 OpaDotNet.Compilation.Abstractions.RegoCompilerConfigurator.RegoCompilerConfigurator(OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler) -> void
