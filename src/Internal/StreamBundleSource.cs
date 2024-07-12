@@ -1,6 +1,6 @@
 ﻿namespace OpaDotNet.Compilation.Abstractions;
 
-internal class StreamBundleSource(Stream stream) : IBundleEntry
+internal class StreamBundleEntry(Stream stream) : IBundleEntry
 {
     public Stream Stream => stream;
 

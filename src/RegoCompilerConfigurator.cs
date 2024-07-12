@@ -108,7 +108,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     {
         ArgumentNullException.ThrowIfNull(stream);
 
-        _entries.Add(new StreamBundleSource(stream));
+        _entries.Add(new StreamBundleEntry(stream));
         return this;
     }
 
@@ -139,7 +139,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
             if (_entries[0] is FileBundleEntry fbe)
                 return await compiler.Compile(fbe.Path, _options, cancellationToken).ConfigureAwait(false);
 
-            if (_entries[0] is StreamBundleSource sbs)
+            if (_entries[0] is StreamBundleEntry sbs)
                 return await compiler.Compile(sbs.Stream, _options, cancellationToken).ConfigureAwait(false);
         }
 
