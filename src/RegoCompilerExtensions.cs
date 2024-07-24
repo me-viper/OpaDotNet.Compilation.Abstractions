@@ -28,7 +28,7 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(bundlePath);
 
-        var c = new RegoCompilerConfigurator(compiler)
+        var c = new RegoConfigurableCompiler(compiler)
             .WithAsBundle()
             .WithSourcePath(bundlePath);
 
@@ -57,7 +57,7 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(sourceFilePath);
 
-        var c = new RegoCompilerConfigurator(compiler).WithSourcePath(sourceFilePath);
+        var c = new RegoConfigurableCompiler(compiler).WithSourcePath(sourceFilePath);
 
         if (entrypoints != null)
             c.WithEntrypoints(entrypoints);
@@ -85,7 +85,7 @@ public static class RegoCompilerExtensions
     {
         ArgumentNullException.ThrowIfNull(bundle);
 
-        var c = new RegoCompilerConfigurator(compiler)
+        var c = new RegoConfigurableCompiler(compiler)
             .WithAsBundle()
             .WithSourceStream(bundle);
 
@@ -124,7 +124,7 @@ public static class RegoCompilerExtensions
 
         bundle.Seek(0, SeekOrigin.Begin);
 
-        var c = new RegoCompilerConfigurator(compiler)
+        var c = new RegoConfigurableCompiler(compiler)
             .WithAsBundle()
             .WithSourceStream(bundle);
 
@@ -139,5 +139,5 @@ public static class RegoCompilerExtensions
     /// </summary>
     /// <param name="compiler">Compiler instance.</param>
     /// <returns>Compiler options configuration.</returns>
-    public static RegoCompilerConfigurator Configure(this IRegoCompiler compiler) => new(compiler);
+    public static IRegoConfigurableCompiler Configure(this IRegoCompiler compiler) => new RegoConfigurableCompiler(compiler);
 }

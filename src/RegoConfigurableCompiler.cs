@@ -1,12 +1,9 @@
-﻿using JetBrains.Annotations;
-
-namespace OpaDotNet.Compilation.Abstractions;
+﻿namespace OpaDotNet.Compilation.Abstractions;
 
 /// <summary>
 /// Exposes an OPA policy compiler.
 /// </summary>
-[PublicAPI]
-public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
+internal sealed class RegoConfigurableCompiler(IRegoCompiler compiler) : IRegoConfigurableCompiler
 {
     private CompilationParameters _options = new();
 
@@ -19,7 +16,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Output bundle revision.
     /// </summary>
-    public RegoCompilerConfigurator WithRevision(string revision)
+    public IRegoConfigurableCompiler WithRevision(string revision)
     {
         _options = _options with { Revision = revision };
         return this;
@@ -29,7 +26,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// Specifies bundle manifest.
     /// </summary>
     /// <param name="manifest">Bundle manifest.</param>
-    public RegoCompilerConfigurator WithManifest(BundleManifest manifest)
+    public IRegoConfigurableCompiler WithManifest(BundleManifest manifest)
     {
         ArgumentNullException.ThrowIfNull(manifest);
 
@@ -40,7 +37,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Specifies if compilation source if file or bundle.
     /// </summary>
-    public RegoCompilerConfigurator WithAsBundle(bool isBundle = true)
+    public IRegoConfigurableCompiler WithAsBundle(bool isBundle = true)
     {
         _options = _options with { IsBundle = isBundle };
         return this;
@@ -49,7 +46,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Which documents (entrypoints) will be queried when asking for policy decisions.
     /// </summary>
-    public RegoCompilerConfigurator WithEntrypoints(IEnumerable<string> entrypoints)
+    public IRegoConfigurableCompiler WithEntrypoints(IEnumerable<string> entrypoints)
     {
         ArgumentNullException.ThrowIfNull(entrypoints);
 
@@ -60,7 +57,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Which documents (entrypoints) will be queried when asking for policy decisions.
     /// </summary>
-    public RegoCompilerConfigurator WithEntrypoints(string[] entrypoints)
+    public IRegoConfigurableCompiler WithEntrypoints(string[] entrypoints)
     {
         ArgumentNullException.ThrowIfNull(entrypoints);
 
@@ -71,7 +68,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Capabilities file that defines the built-in functions and other language features that policies may depend on.
     /// </summary>
-    public RegoCompilerConfigurator WithCapabilities(string path)
+    public IRegoConfigurableCompiler WithCapabilities(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
 
@@ -82,7 +79,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Capabilities json that defines the built-in functions and other language features that policies may depend on.
     /// </summary>
-    public RegoCompilerConfigurator WithCapabilities(Stream stream)
+    public IRegoConfigurableCompiler WithCapabilities(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
 
@@ -93,7 +90,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from path.
     /// </summary>
-    public RegoCompilerConfigurator WithSourcePath(string path)
+    public IRegoConfigurableCompiler WithSourcePath(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
 
@@ -104,7 +101,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from stream.
     /// </summary>
-    public RegoCompilerConfigurator WithSourceStream(Stream stream)
+    public IRegoConfigurableCompiler WithSourceStream(Stream stream)
     {
         ArgumentNullException.ThrowIfNull(stream);
 
@@ -115,7 +112,7 @@ public sealed class RegoCompilerConfigurator(IRegoCompiler compiler)
     /// <summary>
     /// Sets compilation source from source code.
     /// </summary>
-    public RegoCompilerConfigurator WithSourceCode(string source)
+    public IRegoConfigurableCompiler WithSourceCode(string source)
     {
         ArgumentException.ThrowIfNullOrEmpty(source);
 
