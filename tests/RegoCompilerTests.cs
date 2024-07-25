@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace OpaDotNet.Compilation.Abstractions.Tests;
 
-public class RegoCompilerTests
+internal class RegoCompilerTests
 {
     private readonly ILoggerFactory _loggerFactory;
 

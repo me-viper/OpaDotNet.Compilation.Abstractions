@@ -181,7 +181,7 @@ internal static class TarGzHelper
     }
 }
 
-public class XunitLoggerProvider : ILoggerProvider
+internal class XunitLoggerProvider : ILoggerProvider
 {
     // Used to distinguish when multiple apps are running as part of the same test.
     private static int _instanceCount = 0;
@@ -208,7 +208,7 @@ public class XunitLoggerProvider : ILoggerProvider
     }
 }
 
-public class XunitLogger : ILogger
+internal class XunitLogger : ILogger
 {
     private static readonly string[] NewLineChars = { Environment.NewLine };
     private readonly string _category;
