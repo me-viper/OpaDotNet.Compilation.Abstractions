@@ -10,6 +10,8 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 
+using MemoryStream = System.IO.MemoryStream;
+
 namespace OpaDotNet.Compilation.Abstractions;
 
 /// <summary>
@@ -212,6 +214,19 @@ public sealed class BundleWriter : IDisposable, IAsyncDisposable
 
         _writer.WriteEntry(entry);
         IsEmpty = false;
+    }
+
+    /// <summary>
+    /// Merges contents of source bundle into this bundle.
+    /// </summary>
+    /// <param name="bundle">Source bundle.</param>
+    public void WriteBundle(Span<byte> bundle)
+    {
+        using var ms = new MemoryStream(bundle.Length);
+        ms.Write(bundle);
+        ms.Seek(0, SeekOrigin.Begin);
+
+        WriteBundle(ms);
     }
 
     /// <summary>

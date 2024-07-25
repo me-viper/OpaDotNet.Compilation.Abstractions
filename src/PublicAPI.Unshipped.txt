@@ -1,25 +1,36 @@
 #nullable enable
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteBundle(System.IO.Stream! bundle) -> void
+OpaDotNet.Compilation.Abstractions.BundleWriter.WriteBundle(System.Span<byte> bundle) -> void
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteFile(string! path, string? overridePath = null) -> void
 OpaDotNet.Compilation.Abstractions.BundleWriter.WriteManifest(OpaDotNet.Compilation.Abstractions.BundleManifest! manifest) -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesBytes.get -> System.ReadOnlyMemory<byte>
+OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesBytes.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesFilePath.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesVersion.get -> string?
+OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesVersion.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Debug.get -> bool
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Debug.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Entrypoints.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Ignore.get -> System.Collections.Generic.IReadOnlySet<string!>!
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Ignore.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.IsBundle.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.OutputPath.get -> string?
+OpaDotNet.Compilation.Abstractions.CompilationParameters.OutputPath.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.PruneUnused.get -> bool
+OpaDotNet.Compilation.Abstractions.CompilationParameters.PruneUnused.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.RegoVersion.get -> OpaDotNet.Compilation.Abstractions.RegoVersion
+OpaDotNet.Compilation.Abstractions.CompilationParameters.RegoVersion.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.get -> string?
-OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.init -> void
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.CompileAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.IO.Stream!>!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithAsBundle(bool isBundle = true) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithCapabilities(string! path) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithCapabilities(System.IO.Stream! stream) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithEntrypoints(string![]! entrypoints) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithEntrypoints(System.Collections.Generic.IEnumerable<string!>! entrypoints) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithManifest(OpaDotNet.Compilation.Abstractions.BundleManifest! manifest) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithRevision(string! revision) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithSourceCode(string! source) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithSourcePath(string! path) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler.WithSourceStream(System.IO.Stream! stream) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
-OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.RegoVersion.get -> OpaDotNet.Compilation.Abstractions.RegoVersion
-OpaDotNet.Compilation.Abstractions.RegoCompilerOptions.RegoVersion.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.Revision.set -> void
 OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V0 = 0 -> OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V0CompatV1 = 1 -> OpaDotNet.Compilation.Abstractions.RegoVersion
 OpaDotNet.Compilation.Abstractions.RegoVersion.V1 = 2 -> OpaDotNet.Compilation.Abstractions.RegoVersion
-static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.Configure(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler) -> OpaDotNet.Compilation.Abstractions.IRegoConfigurableCompiler!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileBundleAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! path, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileBundleAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! path, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileBundleAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, System.IO.Stream! bundle, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileBundleAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, System.IO.Stream! bundle, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileFileAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! sourceFilePath, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileFileAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! sourceFilePath, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileSourceAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! source, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters) -> System.Threading.Tasks.Task<System.IO.Stream!>!
+static OpaDotNet.Compilation.Abstractions.RegoCompilerExtensions.CompileSourceAsync(this OpaDotNet.Compilation.Abstractions.IRegoCompiler! compiler, string! source, OpaDotNet.Compilation.Abstractions.CompilationParameters! parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.IO.Stream!>!

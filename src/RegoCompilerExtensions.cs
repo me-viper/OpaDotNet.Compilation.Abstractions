@@ -19,6 +19,7 @@ public static class RegoCompilerExtensions
     /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
+    [Obsolete("Use IRegoCompiler.CompileBundleAsync instead")]
     public static async Task<Stream> CompileBundle(
         this IRegoCompiler compiler,
         string bundlePath,
@@ -28,17 +29,14 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(bundlePath);
 
-        var c = new RegoConfigurableCompiler(compiler)
-            .WithAsBundle()
-            .WithSourcePath(bundlePath);
+        var opts = new CompilationParameters
+        {
+            Entrypoints = entrypoints?.ToHashSet(),
+            CapabilitiesFilePath = capabilitiesFilePath,
+            IsBundle = true,
+        };
 
-        if (entrypoints != null)
-            c.WithEntrypoints(entrypoints);
-
-        if (capabilitiesFilePath != null)
-            c.WithCapabilities(capabilitiesFilePath);
-
-        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
+        return await compiler.CompileBundleAsync(bundlePath, opts, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -49,7 +47,8 @@ public static class RegoCompilerExtensions
     /// <param name="entrypoints">Which documents (entrypoints) will be queried when asking for policy decisions.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static async Task<Stream> CompileFile(
+    [Obsolete("Use IRegoCompiler.CompileFileAsync instead")]
+    public static Task<Stream> CompileFile(
         this IRegoCompiler compiler,
         string sourceFilePath,
         IEnumerable<string>? entrypoints = null,
@@ -57,12 +56,8 @@ public static class RegoCompilerExtensions
     {
         ArgumentException.ThrowIfNullOrEmpty(sourceFilePath);
 
-        var c = new RegoConfigurableCompiler(compiler).WithSourcePath(sourceFilePath);
-
-        if (entrypoints != null)
-            c.WithEntrypoints(entrypoints);
-
-        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
+        var opts = new CompilationParameters { Entrypoints = entrypoints?.ToHashSet() };
+        return compiler.Compile(sourceFilePath, opts, cancellationToken);
     }
 
     /// <summary>
@@ -76,7 +71,8 @@ public static class RegoCompilerExtensions
     /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static async Task<Stream> CompileStream(
+    [Obsolete("Use IRegoCompiler.CompileBundleAsync instead")]
+    public static Task<Stream> CompileStream(
         this IRegoCompiler compiler,
         Stream bundle,
         IEnumerable<string>? entrypoints = null,
@@ -85,17 +81,22 @@ public static class RegoCompilerExtensions
     {
         ArgumentNullException.ThrowIfNull(bundle);
 
-        var c = new RegoConfigurableCompiler(compiler)
-            .WithAsBundle()
-            .WithSourceStream(bundle);
-
-        if (entrypoints != null)
-            c.WithEntrypoints(entrypoints);
+        var capsMem = Memory<byte>.Empty;
 
         if (capabilitiesJson != null)
-            c.WithCapabilities(capabilitiesJson);
+        {
+            capsMem = new byte[(int)capabilitiesJson.Length];
+            _ = capabilitiesJson.Read(capsMem.Span);
+        }
 
-        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
+        var opts = new CompilationParameters
+        {
+            Entrypoints = entrypoints?.ToHashSet(),
+            CapabilitiesBytes = capsMem,
+            IsBundle = true,
+        };
+
+        return compiler.CompileBundleAsync(bundle, opts, cancellationToken);
     }
 
     /// <summary>
@@ -106,13 +107,88 @@ public static class RegoCompilerExtensions
     /// <param name="entrypoints">Which documents (entrypoints) will be queried when asking for policy decisions.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Compiled OPA bundle stream.</returns>
-    public static async Task<Stream> CompileSource(
+    [Obsolete("Use IRegoCompiler.CompileSourceAsync instead")]
+    public static Task<Stream> CompileSource(
         this IRegoCompiler compiler,
         string source,
         IEnumerable<string>? entrypoints = null,
         CancellationToken cancellationToken = default)
     {
+        var opts = new CompilationParameters
+        {
+            Entrypoints = entrypoints?.ToHashSet(),
+            IsBundle = true,
+        };
+
+        return compiler.CompileSourceAsync(source, opts, cancellationToken);
+    }
+
+    /// <summary>
+    /// Compiles OPA bundle from rego bundle stream.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="sourceFilePath">Source file path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileFileAsync(
+        this IRegoCompiler compiler,
+        string sourceFilePath,
+        CompilationParameters parameters) => CompileFileAsync(compiler, sourceFilePath, parameters, CancellationToken.None);
+
+    /// <summary>
+    /// Compiles OPA bundle from rego bundle stream.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="sourceFilePath">Source file path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static async Task<Stream> CompileFileAsync(
+        this IRegoCompiler compiler,
+        string sourceFilePath,
+        CompilationParameters parameters,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(sourceFilePath);
+        ArgumentNullException.ThrowIfNull(parameters);
+
+        return await compiler.Compile(
+            sourceFilePath,
+            parameters,
+            cancellationToken
+            ).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Compiles OPA bundle from rego policy source code.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="source">Source file path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileSourceAsync(
+        this IRegoCompiler compiler,
+        string source,
+        CompilationParameters parameters) => CompileSourceAsync(compiler, source, parameters, CancellationToken.None);
+
+    /// <summary>
+    /// Compiles OPA bundle from rego policy source code.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="source">Source file path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static async Task<Stream> CompileSourceAsync(
+        this IRegoCompiler compiler,
+        string source,
+        CompilationParameters parameters,
+        CancellationToken cancellationToken)
+    {
         ArgumentException.ThrowIfNullOrEmpty(source);
+        ArgumentNullException.ThrowIfNull(parameters);
 
         using var bundle = new MemoryStream();
         var bw = new BundleWriter(bundle);
@@ -124,20 +200,86 @@ public static class RegoCompilerExtensions
 
         bundle.Seek(0, SeekOrigin.Begin);
 
-        var c = new RegoConfigurableCompiler(compiler)
-            .WithAsBundle()
-            .WithSourceStream(bundle);
-
-        if (entrypoints != null)
-            c.WithEntrypoints(entrypoints);
-
-        return await c.CompileAsync(cancellationToken).ConfigureAwait(false);
+        return await compiler.Compile(
+            bundle,
+            parameters.IsBundle ? parameters : parameters with { IsBundle = true },
+            cancellationToken
+            ).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Enables advanced compiler options configuration.
+    /// Compiles OPA bundle from rego bundle stream.
     /// </summary>
     /// <param name="compiler">Compiler instance.</param>
-    /// <returns>Compiler options configuration.</returns>
-    public static IRegoConfigurableCompiler Configure(this IRegoCompiler compiler) => new RegoConfigurableCompiler(compiler);
+    /// <param name="path">Bundle directory or bundle archive path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileBundleAsync(
+        this IRegoCompiler compiler,
+        string path,
+        CompilationParameters parameters) => CompileBundleAsync(compiler, path, parameters, CancellationToken.None);
+
+    /// <summary>
+    /// Compiles OPA bundle from rego bundle stream.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="path">Bundle directory or bundle archive path.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileBundleAsync(
+        this IRegoCompiler compiler,
+        string path,
+        CompilationParameters parameters,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(path);
+        ArgumentNullException.ThrowIfNull(parameters);
+
+        return compiler.Compile(
+            path,
+            parameters.IsBundle ? parameters : parameters with { IsBundle = true },
+            cancellationToken
+            );
+    }
+
+    /// <summary>
+    /// Compiles OPA bundle from rego bundle stream.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="bundle">Rego bundle stream.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileBundleAsync(
+        this IRegoCompiler compiler,
+        Stream bundle,
+        CompilationParameters parameters) => CompileBundleAsync(compiler, bundle, parameters, CancellationToken.None);
+
+    /// <summary>
+    /// Compiles OPA bundle from rego bundle stream.
+    /// </summary>
+    /// <param name="compiler">Compiler instance.</param>
+    /// <param name="bundle">Rego bundle stream.</param>
+    /// <param name="parameters">Compiler parameters.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <remarks>This method always compiles contents as bundle.</remarks>
+    /// <returns>Compiled OPA bundle stream.</returns>
+    public static Task<Stream> CompileBundleAsync(
+        this IRegoCompiler compiler,
+        Stream bundle,
+        CompilationParameters parameters,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(bundle);
+        ArgumentNullException.ThrowIfNull(parameters);
+
+        return compiler.Compile(
+            bundle,
+            parameters.IsBundle ? parameters : parameters with { IsBundle = true },
+            cancellationToken
+            );
+    }
 }

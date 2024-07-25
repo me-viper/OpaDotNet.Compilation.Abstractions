@@ -83,6 +83,8 @@ internal static class AssertBundle
     {
         ArgumentNullException.ThrowIfNull(bundle);
 
+        Assert.NotEqual(0, bundle.Length);
+
         using var gzip = new GZipStream(bundle, CompressionMode.Decompress, true);
         using var ms = new MemoryStream();
 
