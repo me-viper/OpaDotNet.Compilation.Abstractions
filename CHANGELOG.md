@@ -4,7 +4,7 @@
 
 ### Features
 
-* Support `--v1-compatible` and `--revision` compiler flags
+* Support `--v1-compatible`, `--follow-symlinks` and `--revision` compiler flags
 * Public API improvements
 * Add API to write bundle manifest to `BundleWriter`
 

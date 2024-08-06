@@ -29,8 +29,12 @@ OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesVersion.get
 OpaDotNet.Compilation.Abstractions.CompilationParameters.CapabilitiesVersion.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Debug.get -> bool
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Debug.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.DisablePrintStatements.get -> bool
+OpaDotNet.Compilation.Abstractions.CompilationParameters.DisablePrintStatements.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Entrypoints.get -> System.Collections.Generic.IReadOnlySet<string!>?
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Entrypoints.set -> void
+OpaDotNet.Compilation.Abstractions.CompilationParameters.FollowSymlinks.get -> bool
+OpaDotNet.Compilation.Abstractions.CompilationParameters.FollowSymlinks.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Ignore.get -> System.Collections.Generic.IReadOnlySet<string!>!
 OpaDotNet.Compilation.Abstractions.CompilationParameters.Ignore.set -> void
 OpaDotNet.Compilation.Abstractions.CompilationParameters.IsBundle.get -> bool

@@ -91,4 +91,14 @@ public record CompilationParameters
     /// Sets OPA features and behaviors that will be enabled by default.
     /// </summary>
     public RegoVersion RegoVersion { get; set; } = RegoVersion.V0;
+
+    /// <summary>
+    /// Follow symlinks in the input set of paths when building the bundle.
+    /// </summary>
+    public bool FollowSymlinks { get; set; }
+
+    /// <summary>
+    /// If print statements are not enabled, calls to <c>print()</c> are erased at compile-time
+    /// </summary>
+    public bool DisablePrintStatements { get; set; }
 }

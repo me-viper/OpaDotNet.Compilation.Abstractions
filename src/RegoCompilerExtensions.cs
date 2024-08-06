@@ -208,7 +208,7 @@ public static class RegoCompilerExtensions
     }
 
     /// <summary>
-    /// Compiles OPA bundle from rego bundle stream.
+    /// Compiles OPA bundle from path.
     /// </summary>
     /// <param name="compiler">Compiler instance.</param>
     /// <param name="path">Bundle directory or bundle archive path.</param>
